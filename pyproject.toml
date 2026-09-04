@@ -1,0 +1,266 @@
+[tool.mypy]
+plugins = ["sqlalchemy.ext.mypy.plugin", "pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = "furl.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "jwcrypto.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "uvicorn"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "uvicorn.logging.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "postmarker.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "sendgrid.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "dramatiq.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "passlib.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "asyncpg.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "pymysql.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "pycountry.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "sentry_dramatiq.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "wtforms.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "apscheduler.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "sqlalchemy_utils.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "posthog.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "python_http_client.*"
+ignore_missing_imports = true
+
+[tool.ruff]
+extend-select = ["I", "TRY"]
+ignore = ["E501"]
+per-file-ignores = {"conftest.py" = ["E731"], "tests/*" = ["TRY"], "fief/repositories/*" = ["E711", "E712"], "fief/alembic/*" = ["F401"]}
+
+[tool.coverage.run]
+concurrency = ["thread", "gevent"]
+omit = ["fief/alembic/*"]
+
+[tool.pytest.ini_options]
+addopts = "--cov fief/ --cov-report=term-missing"
+markers = ["test_data", "workspace_host", "access_token", "authenticated_admin", "htmx"]
+asyncio_mode = "strict"
+
+[tool.hatch]
+
+[tool.hatch.build]
+include = [
+  "/fief/**/*.py",
+  "/fief/py.typed",
+  "/fief/alembic.ini",
+  "/fief/locale",
+  "/fief/static",
+  "/fief/templates",
+  "/fief/services/email_template/templates",
+]
+artifacts = [
+  "/fief/static/**/*.js",
+  "/fief/static/**/*.css",
+  "/fief/locale/**/*.mo",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.version]
+source = "regex_commit"
+commit_extra_args = ["-e"]
+path = "fief/__init__.py"
+
+[tool.hatch.envs.default]
+python = "3.11"
+dependencies = [
+  "asgi-lifespan",
+  "beautifulsoup4",
+  "black",
+  "coverage[toml]",
+  "gevent",
+  "httpx",
+  "mypy",
+  "pytest",
+  "pytest-cov",
+  "pytest-asyncio",
+  "pytest-mock",
+  "respx",
+  "ruff",
+  "types-python-slugify",
+  "types-pytz",
+]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest {args}"
+test-cov-xml = "pytest --cov fief/ --cov-report=xml --exitfirst"
+
+lint = [
+  "black . ",
+  "ruff --fix .",
+  "mypy fief/",
+]
+lint-check = [
+  "black --check .",
+  "ruff .",
+  "mypy fief/",
+]
+
+"translations.add" = [
+  "mkdir -p fief/locale/{args}/LC_MESSAGES",
+  "touch fief/locale/{args}/LC_MESSAGES/messages.po",
+  "hatch run translations.update",
+]
+"translations.update" = [
+  "pybabel extract --mapping babel.cfg --output-file=fief/locale/messages.pot .",
+  "pybabel update --domain=messages --input-file=fief/locale/messages.pot --output-dir=fief/locale",
+]
+"translations.compile" = [
+  "pybabel compile --domain=messages --directory=fief/locale",
+]
+
+"static.build" = "npm run build"
+
+"migrations.main.create" = [
+  "hatch run dev.db.start",
+  "alembic -c fief/alembic.ini -n main revision --autogenerate -m {args}",
+]
+"migrations.main.migrate" = [
+  "hatch run dev.db.start",
+  "alembic -c fief/alembic.ini -n main upgrade head",
+]
+"migrations.workspace.create" = [
+  "hatch run dev.db.start",
+  "alembic -c fief/alembic.ini -n workspace revision --autogenerate -m {args}",
+]
+"migrations.workspace.migrate" = [
+  "hatch run dev.db.start",
+  "alembic -c fief/alembic.ini -n workspace upgrade head",
+]
+
+"telemetry.set-posthog-key" = [
+  "sed -i.bak 's/__POSTHOG_API_KEY__/{args}/' fief/services/posthog.py",
+  "rm fief/services/posthog.py.bak"
+]
+
+"dev.db.create" = [
+  "docker volume create fief-dev-db",
+  "docker run -p 5432:5432 --name fief-dev-db -e PGDATA=/var/lib/postgresql/data/pgdata -e POSTGRES_USER=fief -e POSTGRES_PASSWORD=fiefpassword -v fief-dev-db:/var/lib/postgresql/data -d postgres:14-alpine",
+]
+"dev.db.start" = "docker start fief-dev-db"
+"dev.redis.create" = "docker run -d -p 6379:6379 --name fief-dev-redis redis:alpine"
+"dev.redis.start" = "docker start fief-dev-redis"
+"dev.env.start" = [
+  "hatch run dev.db.start",
+  "hatch run dev.redis.start",
+]
+"dev.server.start" = [
+  "hatch run translations.compile",
+  "hatch run static.build",
+  "uvicorn --host 0.0.0.0 --port 8000 fief.app:app"
+]
+"dev.server.watch" = "watchfiles --ignore-paths fief/static,fief/locale 'hatch run dev.server.start' fief js styles"
+"dev.worker.start" = "dramatiq fief.worker -p 1 -t 1 -f fief.scheduler:schedule"
+"dev.worker.watch" = "watchfiles --ignore-paths fief/static,fief/locale 'hatch run dev.worker.start' fief"
+
+[build-system]
+requires = ["hatchling", "hatch-regex-commit"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fief-server"
+authors = [
+  { name = "François Voron", email = "contact@fief.dev" }
+]
+description = "Users and authentication management SaaS"
+readme = "README.md"
+classifiers = [
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dynamic = ["version"]
+requires-python = ">=3.11"
+dependencies = [
+    "aiomysql ==0.1.1",
+    "aiosqlite ==0.19.0",
+    "alembic ==1.11.1",
+    "apscheduler ==3.10.1",
+    "argon2_cffi ==21.3.0",
+    "asgi-babel==0.9.3",
+    "asyncpg ==0.27.0",
+    "dramatiq[redis] ==1.14.2",
+    "fastapi ==0.95.2",
+    "fastapi-users[sqlalchemy] ==11.0.0",
+    "fief-client ==0.16.1",
+    "furl ==2.1.3",
+    "gunicorn ==20.1.0",
+    "httpx-oauth ==0.11.2",
+    "itsdangerous ==2.1.2",
+    "Jinja2 ==3.1.2",
+    "jwcrypto ==1.5.0",
+    "loguru ==0.7.0",
+    "phonenumbers >=8.12.48,<8.14",
+    "posthog >=3.0.1,<4",
+    "postmarker ==1.0",
+    "sendgrid ==6.10.0",
+    "psycopg2 ==2.9.6",
+    "pycountry >=22.3.5,<22.4",
+    "pydantic[dotenv] ==1.10.8",
+    "python-slugify ==8.0.1",
+    "pytz ==2023.3",
+    "rich ==13.4.1",
+    "sentry_dramatiq ==0.3.3",
+    "sentry-sdk ==1.24.0",
+    "sqlalchemy[mypy] ==2.0.9", # Error with asyncpg+insertmanyvalues starting 2.0.10. Should monitor that.
+    "sqlalchemy-utils ==0.41.1",
+    "typer ==0.9.0",
+    "uvicorn[standard]==0.22.0",
+    "WTForms==3.0.1",
+    "zxcvbn-rs-py==0.1.0",
+]
+
+[project.scripts]
+fief = "fief.cli:app"
+
+[project.urls]
+Documentation = "https://docs.fief.dev"
+Source = "https://github.com/fief-dev/fief"
