@@ -1,0 +1,174 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "shrike71",
+      "name": "shrike71",
+      "avatar_url": "https://avatars.githubusercontent.com/u/748514?v=4",
+      "profile": "https://github.com/shrike71",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
+    },
+    {
+      "login": "trisongz",
+      "name": "trisongz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4735784?v=4",
+      "profile": "https://growthengineai.com",
+      "contributions": [
+        "example",
+        "ideas"
+      ]
+    },
+    {
+      "login": "davidbrochart",
+      "name": "David Brochart",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4711805?v=4",
+      "profile": "https://github.com/davidbrochart",
+      "contributions": [
+        "doc",
+        "code"
+      ]
+    },
+    {
+      "login": "paolodina",
+      "name": "Paolo Dina",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1157401?v=4",
+      "profile": "https://github.com/paolodina",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "duber000",
+      "name": "duber000",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12467861?v=4",
+      "profile": "https://github.com/duber000",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "danilopolani",
+      "name": "Danilo Polani",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6277291?v=4",
+      "profile": "https://theraloss.com",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "ChuckMoe",
+      "name": "Moritz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25569291?v=4",
+      "profile": "https://github.com/ChuckMoe",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "plpsanchez",
+      "name": "plpsanchez",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45295173?v=4",
+      "profile": "https://github.com/plpsanchez",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "WilliamMayor",
+      "name": "William Mayor",
+      "avatar_url": "https://avatars.githubusercontent.com/u/403126?v=4",
+      "profile": "https://github.com/WilliamMayor",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ruipoliveira",
+      "name": "Rui Oliveira",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10942886?v=4",
+      "profile": "http://ruipoliveira.github.io/",
+      "contributions": [
+        "translation",
+        "code"
+      ]
+    },
+    {
+      "login": "JimScope",
+      "name": "Jimmy Angel Pérez Díaz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/27647007?v=4",
+      "profile": "https://jimscope.is-a.dev",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "michaldev",
+      "name": "Michał Rosiak",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5132385?v=4",
+      "profile": "https://pasteman.dev/",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "olimcc",
+      "name": "olimcc",
+      "avatar_url": "https://avatars.githubusercontent.com/u/842983?v=4",
+      "profile": "http://www.olimcc.com",
+      "contributions": [
+        "security"
+      ]
+    },
+    {
+      "login": "jhamman",
+      "name": "Joe Hamman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2443309?v=4",
+      "profile": "http://joehamman.com",
+      "contributions": [
+        "security"
+      ]
+    },
+    {
+      "login": "zfei",
+      "name": "zfei",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1736058?v=4",
+      "profile": "https://github.com/zfei",
+      "contributions": [
+        "translation",
+        "code"
+      ]
+    },
+    {
+      "login": "bartosz121",
+      "name": "Bartosz Magiera",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28759224?v=4",
+      "profile": "https://bartoszmagiera.live/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "oaltun",
+      "name": "oaltun",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10688199?v=4",
+      "profile": "http://razalt.com",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "fief",
+  "projectOwner": "fief-dev",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true,
+  "commitConvention": "angular"
+}
